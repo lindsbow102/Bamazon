@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/lindsbow102/Bamazon#readme",
   "dependencies": {
+    "console.table": "^0.10.0",
     "inquirer": "^5.2.0",
     "mysql": "^2.15.0"
   },
