@@ -22,7 +22,6 @@ function runBamazon() {
     // Display the available inventory
     promptManager();
 }
-// Run the application logic
 runBamazon();
 
 
@@ -54,22 +53,24 @@ function promptManager() {
 			}
         }
     ]).then(function(input) {
-		// console.log('User has selected: ' + JSON.stringify(input));
 
-		// Trigger the appropriate action based on the user input
-		if (input.option ==='sale') {
-			displayInventory();
-		} else if (input.option === 'lowInventory') {
-			displayLowInventory();
-		} else if (input.option === 'addInventory') {
-			addInventory();
-		} else if (input.option === 'newProduct') {
-			createNewProduct();
-		} else {
-			// This case should be unreachable
-			console.log('ERROR: Unsupported operation!');
-			exit(1);
-		}
+        switch(input.option) {
+            case 'sale':
+                displayInventory();
+                break;
+            case 'lowInventory':
+                displayLowInventory();
+                break;
+            case 'addInventory':
+                addInventory();
+                break;
+            case 'newProduct':
+                createNewProduct();
+                break;
+            default:
+            console.log('ERROR: Unsupported operation!');
+        
+        }
 	})
 }
 
