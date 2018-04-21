@@ -20,14 +20,14 @@ var connection = mysql.createConnection({
 function runBamazon() {
 
     // Display the available inventory
-    promptManagerAction();
+    promptManager();
 }
 // Run the application logic
 runBamazon();
 
 
 // promptManagerAction will present menu options to the manager and trigger appropriate logic
-function promptManagerAction() {
+function promptManager() {
 
 	// Prompt the manager to select an option
 	inquirer.prompt([
@@ -35,7 +35,8 @@ function promptManagerAction() {
 			type: 'list',
 			name: 'option',
 			message: 'Please select an option:',
-			choices: ['View Products for Sale', 'View Low Inventory', 'Add to Inventory', 'Add New Product'],
+            choices: ['View Products for Sale', 'View Low Inventory', 'Add to Inventory', 'Add New Product'],
+            /* put choices into objects and get rif of if/else statements*/
 			filter: function (val) {
 				if (val === 'View Products for Sale') {
 					return 'sale';
