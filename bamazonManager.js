@@ -35,25 +35,30 @@ function promptManager() {
 			name: 'option',
 			message: 'Please select an option:',
             choices: ['View Products for Sale', 'View Low Inventory', 'Add to Inventory', 'Add New Product'],
-            /* put choices into objects and get rif of if/else statements*/
+
+            //assign nicknames for each manager choice input.option
 			filter: function (val) {
-				if (val === 'View Products for Sale') {
-					return 'sale';
-				} else if (val === 'View Low Inventory') {
-					return 'lowInventory';
-				} else if (val === 'Add to Inventory') {
-					return 'addInventory';
-				} else if (val === 'Add New Product') {
-					return 'newProduct';
-				} else {
-					// This case should be unreachable
-					console.log('ERROR: Unsupported operation!');
-					exit(1);
-				}
+                switch (val) {
+                    case 'View Products for Sale':
+                        return 'sale';
+                        break;
+                    case 'View Low Inventory':
+                        return 'lowInventory';
+                        break;
+                    case 'Add to Inventory':
+                        return 'addInventory';
+                        break;
+                    case 'Add New Product':
+                        return 'newProduct';
+                        break;
+                    default:
+                        console.log('ERROR: Unsupported operation!');
+                }
 			}
         }
     ]).then(function(input) {
 
+        //Depending on the manager's choice, run a function that matches that choice
         switch(input.option) {
             case 'sale':
                 displayInventory();
@@ -85,16 +90,17 @@ function displayInventory() {
     })
 }
 
+//If manager wants to see low inventory (any product that has less than 30 items in stock)
 function displayLowInventory() {
 
 	// Construct the db query string
-	queryStr = 'SELECT * FROM products WHERE stock_quantity < 100';
+	queryStr = 'SELECT * FROM products WHERE stock_quantity < 30';
 
 	// Make the db query
 	connection.query(queryStr, function(err, res) {
 		if (err) throw err;
 
-		console.log('Low Inventory Items (below 100): ');
+		console.log('Low Inventory Items (below 30): ');
 		console.table(res);
         connection.end();
 		})
@@ -125,10 +131,10 @@ function validateNumeric(value) {
 	}
 }
 
-// addInventory will guilde a user in adding additional quantify to an existing item
+// addInventory will guide a manager in adding additional quantify to an existing item
 function addInventory() {
 
-	// Prompt the user to select an item
+	// Prompt the manager to select an item
 	inquirer.prompt([
 		{
 			type: 'input',
@@ -145,7 +151,6 @@ function addInventory() {
 			filter: Number
         }
     ]).then(function(input) {
-		// console.log('Manager has selected: \n    item_id = '  + input.item_id + '\n    additional quantity = ' + input.quantity);
 
 		var item = input.item_id;
 		var addQuantity = input.quantity;
@@ -156,9 +161,7 @@ function addInventory() {
 		connection.query(queryStr, {item_id: item}, function(err, res) {
 			if (err) throw err;
 
-			// If the user has selected an invalid item ID, data attay will be empty
-			// console.log('data = ' + JSON.stringify(data));
-
+			// If the user has selected an invalid item ID, data array will be empty
 			if (res.length === 0) {
 				console.log('ERROR: Invalid Item ID. Please select a valid Item ID.');
 				addInventory();
@@ -169,7 +172,6 @@ function addInventory() {
 
 				// Construct the updating query string
 				var updateQueryStr = 'UPDATE products SET stock_quantity = ' + (productData.stock_quantity + addQuantity) + ' WHERE item_id = ' + item;
-				// console.log('updateQueryStr = ' + updateQueryStr);
 
 				// Update the inventory
 				connection.query(updateQueryStr, function(err, res) {

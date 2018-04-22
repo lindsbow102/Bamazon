@@ -22,8 +22,6 @@ function runBamazon() {
     // Display the available inventory
     displayInventory();
 }
-
-// Run the application logic
 runBamazon();
 
 //Let's make the data look pretty in a table
@@ -49,7 +47,7 @@ function validateInput(value) {
 }
 
 function promptUserPurchase() {
-    
+
     // Prompt the user to select an item
     inquirer.prompt([
         {
